@@ -3,8 +3,8 @@
 /**
  * Fired during plugin activation
  *
- * @link       https://github.com/sonalirlondhe
- * @since      1.0.0
+ * @link  https://github.com/sonalirlondhe
+ * @since 1.0.0
  *
  * @package    Wp_Book
  * @subpackage Wp_Book/includes
@@ -20,17 +20,19 @@
  * @subpackage Wp_Book/includes
  * @author     Sonali Londhe <sonalilondhe.01@gmail.com>
  */
-class Wp_Book_Activator {
+class Wp_Book_Activator
+{
 
-	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
-	 *
-	 * @since    1.0.0
-	 */
-	public static function activate() {
+    /**
+     * Short Description. (use period)
+     *
+     * Long Description.
+     *
+     * @since 1.0.0
+     */
+    public static function activate()
+    {
 
-	}
+    }
 
 }
