@@ -179,3 +179,72 @@ function render_custom_post_wp_book()
 
 }
 add_action('init', 'render_custom_post_wp_book');
+
+/**
+ * This function creates 1 taxonomies for post type = 'Book'
+ * Hierarchical taxonomy: 'Book Category'
+ */
+function create_wp_book_taxonomies()
+{
+    $labels = array(
+        'name'              => _x(
+            'Book Categories',
+            'taxonomy general name',
+            'textdomain'
+        ),
+        'singular_name'     => _x(
+            'Book Category',
+            'taxonomy singular name',
+            'textdomain'
+        ),
+        'search_items'      => __(
+            'Search Book Category',
+            'textdomain'
+        ),
+        'all_items'         => __(
+            'All Book Categories',
+            'textdomain'
+        ),
+        'parent_item'       => __(
+            'Parent Book Category',
+            'textdomain'
+        ),
+        'parent_item_colon' => __(
+            'Parent Book Category:',
+            'textdomain'
+        ),
+        'edit_item'         => __(
+            'Edit Book Category',
+            'textdomain'
+        ),
+        'update_item'       => __(
+            'Update Book Category',
+            'textdomain'
+        ),
+        'add_new_item'      => __(
+            'Add New Book Category',
+            'textdomain'
+        ),
+        'new_item_name'     => __(
+            'New Book Category Name',
+            'textdomain'
+        ),
+        'menu_name'         => __(
+            'Book Categories',
+            'textdomain'
+        ),
+    );
+
+    $args = array(
+        'hierarchical'      => true,
+        'labels'            => $labels,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'query_var'         => true,
+        'rewrite'           => array( 'slug' => 'book-category' ),
+    );
+    register_taxonomy('Book Category', 'book', $args);
+}
+
+add_action('init', 'create_wp_book_taxonomies');
+
