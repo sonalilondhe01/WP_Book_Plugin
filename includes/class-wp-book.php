@@ -166,7 +166,9 @@ class Wp_Book
         $this->loader->add_action('init', $plugin_admin, 'create_wp_book_taxonomies');
         $this->loader->add_action('add_meta_boxes', $plugin_admin, 'create_wp_book_meta_box');
         $this->loader->add_action('save_post', $plugin_admin, 'save_wp_book_meta_box_meta');
-      
+        $this->loader->add_action('admin_menu', $plugin_admin, 'add_custom_book_sub_menu_page');
+        $this->loader->add_action('admin_init', $plugin_admin, 'custom_sub_menu_page_init');
+
     }
 
     /**
