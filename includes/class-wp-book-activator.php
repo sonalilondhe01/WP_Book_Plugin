@@ -24,15 +24,32 @@ class Wp_Book_Activator
 {
 
     /**
-     * Short Description. (use period)
+     * Create custom table. (use period)
      *
-     * Long Description.
+     * /**
+     *This function creates a custom table 'wp_custom_metabox_info'
+     * to store data publish by our custom metabox
+     *
      *
      * @since 1.0.0
      */
     public static function activate()
     {
-
+        $table_name = 'wp_book_meta';
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta(
+            "CREATE TABLE $table_name (
+          ID bigint(20) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,
+          post_id int(10) NOT NULL,
+          author_name varchar(60) NOT NULL DEFAULT '',
+          price decimal(6,2) NOT NULL DEFAULT 0000.00,
+          publisher varchar(100) NOT NULL DEFAULT '',
+          year varchar(20) NOT NULL,
+          edition varchar(55) NOT NULL,
+          url varchar(64) DEFAULT '' NOT NULL
+        ) CHARACTER SET utf8 COLLATE utf8_general_ci;"
+        );
     }
 
 }
+

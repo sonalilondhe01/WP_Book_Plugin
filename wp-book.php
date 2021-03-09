@@ -59,7 +59,6 @@ function deactivate_wp_book()
 }
 
 register_activation_hook(__FILE__, 'activate_wp_book');
-register_activation_hook(__FILE__, 'create_custom_wp_table');
 register_deactivation_hook(__FILE__, 'deactivate_wp_book');
 
 /**

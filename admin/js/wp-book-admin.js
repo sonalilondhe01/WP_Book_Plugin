@@ -1,31 +1,64 @@
-(function ( $ ) {
+jQuery(document).ready(function ( $ ) {
     'use strict';
 
     /**
      * All of the code for your admin-facing JavaScript source
      * should reside in this file.
      *
-     * Note: It has been assumed you will write jQuery code here, so the
-     * $ function reference has been prepared for usage within the scope
-     * of this function.
-     *
-     * This enables you to define handlers, for when the DOM is ready:
-     *
-     * $(function() {
-     *
-     * });
-     *
-     * When the window is loaded:
-     *
-     * $( window ).load(function() {
-     *
-     * });
-     *
-     * ...and/or other possibilities.
-     *
-     * Ideally, it is not considered best practise to attach more than a
-     * single DOM-ready or window-load handler for a particular page.
-     * Although scripts in the WordPress core, Plugins and Themes may be
-     * practising this, we should strive to set a better example in our own work.
      */
+
+    /**
+     * Form validation for author name field
+     *
+     */
+    $('#wp_author').on('keypress', function (event) {
+        let regex = new RegExp("[a-zA-Z ]+$");
+        let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        if (!regex.test(key)) {
+            event.preventDefault();
+            return false;
+        }
+    });
+
+    /**
+     * Form validation for publisher input field
+     *
+     */
+    $('#wp_publisher').on('keypress', function (event) {
+        let regex = new RegExp("[a-zA-Z()&. _]+$");
+        let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        if (!regex.test(key)) {
+            event.preventDefault();
+            return false;
+        }
+    });
+
+    /**
+     * Form validation for edition input field
+     *
+     */
+
+    $('#wp_edition').on('keypress', function (event) {
+        let regex = new RegExp("[a-zA-Z0-9()&. _]+$");
+        let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        if (!regex.test(key)) {
+            event.preventDefault();
+            return false;
+        }
+    });
+
+    /**
+     * Form validation for url input field
+     *
+     */
+
+    $('#wp_url').on('keypress', function (event) {
+        let regex = new RegExp("[a-zA-Z0-9()&.:@\?\/_]+$");
+        let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        if (!regex.test(key)) {
+            event.preventDefault();
+            return false;
+        }
+    });
+
 })(jQuery);

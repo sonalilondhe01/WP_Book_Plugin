@@ -2,3 +2,9 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
+.form-control {
+    display: block;
+    width: 100%;
+    margin: 5px 0 10px 0;
+}

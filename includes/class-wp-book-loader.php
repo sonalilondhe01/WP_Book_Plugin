@@ -121,7 +121,6 @@ class Wp_Book_Loader
      */
     public function run()
     {
-
         foreach ( $this->filters as $hook ) {
             add_filter($hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'], $hook['accepted_args']);
         }
