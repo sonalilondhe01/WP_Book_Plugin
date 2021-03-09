@@ -1,7 +1,7 @@
 jQuery( document ).ready( function ( $ ) {
 
     /* author_name input validation */
-    $('#author_name').on('keypress', function (event) {
+    $('#wp_author').on('keypress', function (event) {
         let regex = new RegExp("[a-zA-Z ]+$");
         let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
         if (!regex.test(key)) {
@@ -11,7 +11,7 @@ jQuery( document ).ready( function ( $ ) {
     });
 
     /* publisher input validation */
-    $('#publisher').on('keypress', function (event) {
+    $('#wp_publisher').on('keypress', function (event) {
         let regex = new RegExp("[a-zA-Z()&. _]+$");
         let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
         if (!regex.test(key)) {
@@ -22,7 +22,7 @@ jQuery( document ).ready( function ( $ ) {
 
     /* edition input validation */
 
-    $('#edition').on('keypress', function (event) {
+    $('#wp_edition').on('keypress', function (event) {
         let regex = new RegExp("[a-zA-Z0-9()&. _]+$");
         let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
         if (!regex.test(key)) {
@@ -30,4 +30,17 @@ jQuery( document ).ready( function ( $ ) {
             return false;
         }
     });
+
+    /* edition input validation
+
+    $('#url').on('keypress', function (event) {
+        let regex = new RegExp("[a-zA-Z.:\]+$");
+        let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        if (!regex.test(key)) {
+            event.preventDefault();
+            return false;
+        }
+    });
+
+     */
 });

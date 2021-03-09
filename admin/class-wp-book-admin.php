@@ -20,6 +20,16 @@
  * @subpackage Wp_Book/admin
  * @author     Sonali Londhe <sonalilondhe.01@gmail.com>
  */
+
+
+/**
+ * Include
+ */
+require 'wp_custom_book_post.php';
+require 'wp_custom_book_taxonomies.php';
+require 'wp_custom_metabox.php';
+require 'wp_custom_admin_settings_page.php';
+
 class Wp_Book_Admin
 {
 
@@ -65,7 +75,6 @@ class Wp_Book_Admin
     {
 
         /**
-         * This function is provided for demonstration purposes only.
          *
          * An instance of this class should be passed to the run() function
          * defined in Wp_Book_Loader as all of the hooks are defined
@@ -76,7 +85,9 @@ class Wp_Book_Admin
          * class.
          */
 
-        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/wp-book-admin.css', array(), $this->version, 'all');
+        wp_enqueue_style($this->plugin_name,
+            plugin_dir_url(__FILE__) . 'css/wp-book-admin.css',
+            array(), $this->version, 'all');
 
     }
 
@@ -89,7 +100,6 @@ class Wp_Book_Admin
     {
 
         /**
-         * This function is provided for demonstration purposes only.
          *
          * An instance of this class should be passed to the run() function
          * defined in Wp_Book_Loader as all of the hooks are defined
@@ -100,7 +110,8 @@ class Wp_Book_Admin
          * class.
          */
 
-        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/wp-book-admin.js', array( 'jquery' ), $this->version, false);
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) .
+            'js/wp-book-admin.js', array( 'jquery' ), $this->version, false);
 
     }
 

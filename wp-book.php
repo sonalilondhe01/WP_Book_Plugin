@@ -86,10 +86,7 @@ function run_wp_book()
 }
 run_wp_book();
 
-/**
- * Include
- */
- require 'wp_custom_book_post.php';
- require 'wp_custom_book_taxonomies.php';
- require 'wp_custom_metabox.php';
+
+
+
 
