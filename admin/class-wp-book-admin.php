@@ -114,7 +114,7 @@ class Wp_Book_Admin
     /**
      * This class create a custom post type called 'Book'
      */
-    function render_custom_post_wp_book()
+    function register_custom_post_wp_book()
     {
         $labels = array(
             'name'                  => _x(
@@ -375,13 +375,8 @@ class Wp_Book_Admin
      */
     function wp_book_meta_box_html( $post )
     {
-        global $wpdb;
-        $result = $wpdb->get_row(
-            "SELECT * FROM wp_book_meta WHERE post_id = '$post->ID'"
-        );
+        wp_nonce_field( 'wp_book_meta_box_nonce', 'book_meta_box_nonce' );
         ?>
-
-        <div>
         <form id="author-book-info" name="author-book-info" method="post" action="">
         <div>
             <label for="wp_author"><b>Author Name:</b></label>
@@ -392,10 +387,9 @@ class Wp_Book_Admin
                 class="form-control"
                 required="true"
                 style = "display: inline; width: 60%;margin: 5px 0 10px 50px;"
-                value="<?php if($result) {
-                    echo esc_html($result->author_name);
-                       }
-                       ?>"
+                value="<?php echo esc_html(get_metadata('book',$post -> ID,
+                    'wp_author',
+                    true)); ?>"
             />
         </div>
         <div>
@@ -408,12 +402,13 @@ class Wp_Book_Admin
                 id="wp_price"
                 class="form-control"
                 required="true"
-                style = "display: inline; width: 60%;margin: 5px 0 10px 30px;"
+                style = "display: inline; width: 60%;margin: 5px 0 10px 45px;"
                 step="0.10"
                 min = '1'
-                value="<?php if($result) {
-                    echo esc_html($result->price);
-                       } ?>"
+                value="<?php echo esc_html(get_metadata('book',
+                    $post -> ID,
+                    'wp_price',
+                    true)); ?>"
             />
         </div>
         <div>
@@ -425,9 +420,10 @@ class Wp_Book_Admin
                 class="form-control"
                 required="true"
                 style = "display: inline; width: 60%;margin: 5px 0 10px 78px;"
-                value="<?php if($result) {
-                    echo esc_html($result->publisher);
-                       } ?>"
+                value="<?php echo esc_html(get_metadata('book',
+                    $post -> ID,
+                    'wp_publisher',
+                    true)); ?>"
             />
         </div>
         <div>
@@ -438,9 +434,10 @@ class Wp_Book_Admin
                 id="wp_year"
                 style = "display: inline; width: 60%;margin: 5px 0 10px 42px;"
                 class="form-control"
-                value="<?php if($result) {
-                    echo esc_html($result->year);
-                       } ?>"
+                value="<?php echo esc_html(get_metadata(
+                        'book',$post -> ID,
+                        'wp_year',
+                        true)); ?>"
             />
         </div>
         <div>
@@ -452,9 +449,10 @@ class Wp_Book_Admin
                 class="form-control"
                 required="true"
                 style = "display: inline; width: 60%;margin: 5px 0 10px 90px;"
-                value="<?php if($result) {
-                    echo esc_html($result->edition);
-                       } ?>"
+                value="<?php echo esc_html(get_metadata('book',
+                    $post -> ID,
+                    'wp_edition',
+                    true)); ?>"
             />
         </div>
         <div>
@@ -466,15 +464,20 @@ class Wp_Book_Admin
                 class="form-control"
                 required="true"
                 style = "display: inline; width: 60%;margin: 5px 0 10px 110px;"
-                value="<?php if($result) {
-                    echo esc_url($result->url);
-                       } ?>"
+                value="<?php echo esc_url(get_metadata('book',
+                    $post -> ID,
+                    'wp_url',
+                    true)); ?>"
             />
         </div>
         </form>
-        </div>
 
         <?php
+    }
+
+    function register_custom_book_metadata_table() {
+        global $wpdb;
+        $wpdb->bookmeta = $wpdb->prefix . 'bookmeta';
     }
 
     /**
@@ -486,47 +489,39 @@ class Wp_Book_Admin
      */
     function save_wp_book_meta_box_meta(int $post_id)
     {
-        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE )
+      if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE )
         {
             return;
         }
+        if( !isset( $_POST['book_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['book_meta_box_nonce'],'wp_book_meta_box_nonce') )
+            return;
+
         if($parent_id = wp_is_post_revision($post_id) ) {
             $post_id = $parent_id;
         }
 
-        $GLOBALS['post_id'] = $post_id;
+        if ( isset($_POST['wp_author']) ) {
+            update_metadata('book',$post_id, 'wp_author', sanitize_text_field( $_POST['wp_author']));
+        }
 
-        if(isset($_POST['wp_author'])) {
-            $author_name    = $_POST['wp_author'];
-            $price          = $_POST['wp_price'];
-            $publisher      = $_POST['wp_publisher'];
-            $year           = $_POST['wp_year'];
-            $edition        = $_POST['wp_edition'];
-            $url            = $_POST['wp_url'];
+        if ( isset($_POST['wp_price']) ) {
+            update_metadata('book',$post_id, 'wp_price', sanitize_text_field( $_POST['wp_price']));
+        }
 
-            global $wpdb;
-            $args = array(
-                'author_name'   => $author_name,
-                'post_id'       => $post_id,
-                'price'         => $price,
-                'publisher'     => $publisher,
-                'year'          => $year,
-                'edition'       => $edition,
-                'url'           => $url);
+        if ( isset($_POST['wp_publisher']) ) {
+            update_metadata('book',$post_id, 'wp_publisher', sanitize_text_field( $_POST['wp_publisher']));
+        }
 
-            $count = $wpdb->get_var(
-                "SELECT COUNT(*) FROM wp_book_meta WHERE post_id = '$post_id'"
-            );
-            if ( $count == 1 ) {
-                $wpdb->update('wp_book_meta',
-                    $args,
-                    array(
-                        'post_id' => $post_id
-                    )
-                );
-            } else {
-                $wpdb->insert('wp_book_meta', $args );
-            }
+        if ( isset($_POST['wp_year']) ) {
+            update_metadata('book',$post_id, 'wp_year', sanitize_text_field( $_POST['wp_year']));
+        }
+
+        if ( isset($_POST['wp_edition']) ) {
+            update_metadata('book',$post_id, 'wp_edition', sanitize_text_field( $_POST['wp_edition']));
+        }
+
+        if ( isset($_POST['wp_url']) ) {
+           update_metadata('book',$post_id, 'wp_url', sanitize_text_field( $_POST['wp_url']));
         }
     }
     /**
@@ -640,5 +635,126 @@ class Wp_Book_Admin
                    esc_attr($wp_books_per_page_field): '';?>"
                style = "width: 30%; margin-left: 30px;"/>
         <?php
+    }
+
+    /**
+     * Function adds a shortcode [book] to display the book(s) information
+     */
+    function add_wp_book_shortcode() {
+        add_shortcode('book', array($this, 'create_wp_book_shortcode'));
+    }
+
+    /**
+     * Function create a shortcode [book] to display the book(s) information
+     * attributes are id, author_name, year, category, tag, and publisher
+     * @param array $atts optional attributes of shortcode
+     * @return false|string
+     */
+
+    function create_wp_book_shortcode($atts, $content) {
+        shortcode_atts(
+            $temp = [
+                'id' => 0,
+                'wp_author' => '',
+                'wp_year' => '',
+                'wp_category' => '',
+                'wp_tag' => '',
+                'wp_publisher' => ''
+            ], $atts, 'book');
+        $atts = (array)$atts;
+        $attributes = array();
+
+        //Stores attributes passed to shortcode into $attributes array in key value pair
+        foreach ($temp as $key => $default ) {
+            if(array_key_exists($key, $atts)){
+                $attributes[$key] = $atts[$key];
+            }
+           else{
+                $attributes[$key] = $default;
+            }
+        }
+
+
+        if ($attributes['wp_category'] != "" || $attributes["wp_tag"] != "") {
+            $args = [
+                'p'              => $attributes['id'],
+                'post_type'      => 'book',
+                'post_status'    => 'publish',
+                'tax_query'      => [
+                    'relation' => 'OR',
+                    [
+                        'taxonomy'         => 'Book Category',
+                        'field'            => 'slug',
+                        'terms'            => explode(',', $attributes['category']),
+                        'include_children' => true,
+                        'operator'         => 'IN',
+                    ],
+                    [
+                        'taxonomy'         => 'Book Tag',
+                        'field'            => 'slug',
+                        'terms'            => explode(',', $attributes['tag']),
+                        'include_children' => false,
+                        'operator'         => 'IN',
+                    ],
+                ],
+            ];
+        } else if ($attributes['wp_author'] != "" || $attributes["wp_publisher"] != "" || $attributes["wp_year"] != "")
+        {
+
+            $args = [
+                'post_type'      => 'book',
+                'post_status'    => 'publish',
+
+                'meta_query'     => [
+                    'relation' => 'OR',
+                    [
+                        'key'     => 'wp_author',
+                        'value'   => explode(',', $attributes['wp_author']),
+                        'compare' => 'IN',
+                    ],
+                    [
+                        'key'     => 'wp_publisher',
+                        'value'   => explode(',', $attributes['wp_publisher']),
+                        'compare' => 'IN',
+                    ],
+                    [
+                        'key'     => 'wp_year',
+                        'value'   => explode(',', $attributes['wp_year']),
+                        'compare' => 'IN',
+                    ],
+                ],
+            ];
+        } else {
+            $args = [
+                'p' => $attributes['id'],
+                'post_type' => 'book',
+                'post_status' => 'publish',
+            ];
+        }
+
+
+        //If post with given shortcode attribute is present then show otherwise keep blank
+        $query = new WP_Query($args);
+        if ($query->have_posts()) {
+            ob_start(); ?>
+            <div>
+                <h5>Book details</h5>
+            </div>
+            <?php
+            while ($query->have_posts()) {
+                $query->the_post();
+                var_dump(get_the_ID());
+
+               ?>
+                <p>Book ID: <?php echo get_the_ID();?><br />
+                        Author : <?php echo get_metadata('book', get_the_ID(), 'wp_author', true); ?><br />
+                        Publisher : <?php  echo get_metadata('book', get_the_ID(), 'wp_publisher', true );?><br />
+                        Publication date:  <?php echo get_metadata('book', get_the_ID(), 'wp_year', true ); ?><br />
+                </p>
+                <?php
+            }
+        }
+                return ob_get_clean();
+
     }
 }

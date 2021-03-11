@@ -35,19 +35,14 @@ class Wp_Book_Activator
      */
     public static function activate()
     {
-        $table_name = 'wp_book_meta';
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta(
-            "CREATE TABLE $table_name (
-          ID bigint(20) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,
-          post_id int(10) NOT NULL,
-          author_name varchar(60) NOT NULL DEFAULT '',
-          price decimal(6,2) NOT NULL DEFAULT 0000.00,
-          publisher varchar(100) NOT NULL DEFAULT '',
-          year varchar(20) NOT NULL,
-          edition varchar(55) NOT NULL,
-          url varchar(64) DEFAULT '' NOT NULL
-        ) CHARACTER SET utf8 COLLATE utf8_general_ci;"
+            "CREATE TABLE `wp_bookmeta` (`meta_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT, 
+ `book_id` bigint(20) unsigned NOT NULL DEFAULT '0',  
+`meta_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+ `meta_value` longtext COLLATE utf8mb4_unicode_ci, PRIMARY KEY (`meta_id`),
+ KEY `book_id` (`book_id`),  KEY `meta_key` (`meta_key`(191))
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;"
         );
     }
 

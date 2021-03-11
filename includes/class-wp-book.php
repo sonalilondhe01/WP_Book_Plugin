@@ -162,12 +162,14 @@ class Wp_Book
        $this->loader->add_action('admin_enqueue_scripts',$plugin_admin,'enqueue_styles');
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
 
-        $this->loader->add_action('init', $plugin_admin, 'render_custom_post_wp_book');
+        $this->loader->add_action('init', $plugin_admin, 'register_custom_post_wp_book');
         $this->loader->add_action('init', $plugin_admin, 'create_wp_book_taxonomies');
         $this->loader->add_action('add_meta_boxes', $plugin_admin, 'create_wp_book_meta_box');
-        $this->loader->add_action('save_post', $plugin_admin, 'save_wp_book_meta_box_meta');
+        $this->loader->add_action('save_post_book', $plugin_admin, 'save_wp_book_meta_box_meta');
         $this->loader->add_action('admin_menu', $plugin_admin, 'add_custom_book_sub_menu_page');
         $this->loader->add_action('admin_init', $plugin_admin, 'custom_sub_menu_page_init');
+        $this->loader->add_action('init', $plugin_admin, 'add_wp_book_shortcode');
+        $this->loader->add_action('plugins_loaded', $plugin_admin, 'register_custom_book_metadata_table');
 
     }
 
@@ -185,7 +187,6 @@ class Wp_Book
 
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
-
     }
 
     /**
