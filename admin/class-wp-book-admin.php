@@ -749,18 +749,17 @@ class Wp_Book_Admin
                    array(
                        'key'     => 'wp_author',
                        'value'   => $attributes['author_name'] ,
-                       'compare' => 'equals',
-                       'type' => 'string'
+                       'compare' => '='
                    ),
                    array(
                        'key'     => 'wp_publisher',
                        'value'   => $attributes['publisher'],
-                       'compare' => 'equals',
+                       'compare' => '=',
                    ),
                    array(
                        'key'     => 'wp_year',
                        'value'   => $attributes['year'],
-                       'compare' => 'equals',
+                       'compare' => '=',
                    ),
                ),
             );
@@ -771,12 +770,11 @@ class Wp_Book_Admin
                 'post_status' => 'publish',
             ];
         }
-        print_r($args);
+
 
         //If post with given shortcode attribute is
         // present then show otherwise keep blank
         $query = new WP_Query($args);
-        // var_dump($query);
         if ($query->have_posts()) {
             ob_start(); ?>
              <div>
