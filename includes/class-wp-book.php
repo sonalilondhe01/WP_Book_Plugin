@@ -170,6 +170,10 @@ class Wp_Book
         $this->loader->add_action('admin_init', $plugin_admin, 'custom_sub_menu_page_init');
         $this->loader->add_action('init', $plugin_admin, 'add_wp_book_shortcode');
         $this->loader->add_action('plugins_loaded', $plugin_admin, 'register_custom_book_metadata_table');
+        $this->loader->add_action('widgets_init', $plugin_admin, 'register_custom_sidebar');
+        $this->loader->add_action('get_footer', $plugin_admin, 'create_custom_widget_area');
+        $this->loader->add_action('widgets_init', $plugin_admin, 'register_custom_book_category_widget');
+        $this->loader->add_action('wp_dashboard_setup', $plugin_admin, 'register_custom_dashboard_widget');
 
     }
 
